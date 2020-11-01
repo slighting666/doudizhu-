@@ -1,0 +1,71 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
+/*
+1、斗地主：54张牌，存储在一个集合中
+特殊牌：大王、小王
+其他52张牌：
+定义一个数组/集合，存储4种花色：桃心梅方
+定义一个数组/集合，存储13个序号：2,A,K...3
+循环嵌套遍历两个数组/集合，组装52张牌
+桃2桃A桃K...3，心2心A...3
+2、洗牌
+使用集合工具类Collections的方法
+static void shuffle<List<?> list>使用判定的随机源对指定列表进行置换
+会随机的打乱集合中元素的顺序
+3、发牌
+要求：1个人17张牌，剩余3张作为底牌，一人一张轮流发牌：集合的索引（0-53）%3
+定义4个集合：存储3个玩家的牌和底牌
+索引%3，有三个值（0，1,2），0%3=0、1%3=1、2%3=2、3%3=0
+索引>=51，改底牌发牌
+4、看牌
+直接打印集合，遍历存储玩家和底牌的集合
+ */
+public class doudizhu {
+    public static void main(String[] arg) {
+        ArrayList<String> alllist = new ArrayList<>();
+        String[] Color = {"♠", "♥", "♣", "♦"};
+        String[] num = {"2", "A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3"};
+        alllist.add("大王");
+        alllist.add("小王");
+        for (String i : Color) {
+            for (String j : num) {
+                String s = i + j;
+                alllist.add(s);
+            }
+        }
+        //将54张牌放入一个集合中
+        System.out.println(alllist);
+        //打乱这54张牌，用Collections的方法，public static void shuffle(List<?> list)这个静态方法
+        Collections.shuffle(alllist);
+        System.out.println("打乱顺序后的54张牌：" + alllist);
+        //建立4个集合，分别存放3个人摸得牌和最后三张底牌
+        ArrayList<String> dizhu = new ArrayList<>();
+        ArrayList<String> nongmin1 = new ArrayList<>();
+        ArrayList<String> nongmin2 = new ArrayList<>();
+        ArrayList<String> dipai = new ArrayList<>();
+        for (int i = 0; i < alllist.size(); i++) {
+            if (i >= 51) {
+                String s = alllist.get(i);
+                dipai.add(s);
+            } else if (i % 3 == 0) {
+                String s1 = alllist.get(i);
+                dizhu.add(s1);
+            }else if(i % 3 == 1){
+                nongmin1.add(alllist.get(i));
+            }else if(i % 3 ==2){
+                nongmin2.add(alllist.get(i));
+            }
+        }
+        System.out.println("地主的17张牌是:"+dizhu);
+        System.out.println("农民一的17张牌是:"+nongmin1);
+        System.out.println("农民二的17张牌是:"+nongmin2);
+        System.out.println("最后三张底牌是"+dipai);
+        //将最后三张底牌加给地主
+        for (String k:dipai) {
+            dizhu.add(k);
+        }
+        System.out.println("地主的最终牌是"+dizhu);
+    }
+}
